@@ -184,6 +184,18 @@ public class ExamplePlugin extends JavaPlugin {
 ```
 When you test your plugin on and off every few minutes to see your changes, are you really not annoyed that you have to type `stop` or just force close the test server(which could corrupt it) each time you build and test? If you are, this is the solution to your problem.
 
+## You want to try?
+First, clone the repo directly to your project then add these lines of code to the specified files</br>
+`{your_project}/settings.gradle`
+```gradle
+include 'RyunPluginTools'
+```
+`{your_project}/build.gradle`
+```gradle
+dependencies {
+	implementation project(':RyunPluginTools');
+}
+```
 I hope you found all my plugin tools to be helpful. Feedback is appreciated. If you want to add your own, do fork the repo and request a pull once your changes are finalized.
 
 ## Still confused?
