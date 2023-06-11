@@ -120,7 +120,7 @@ public class ExamplePlugin extends JavaPlugin {
 		PluginInfo.Factory
 			.make() //Makes the Factory
 			.setPlugin(this) //Sets your plugin as the source of the information that will be grabbed by the tool
-			.create(); //Sets and creates your plugin environment.
+			.create(); //Sets and creates your plugin information.
 	}
 
 	//This method is called when your plugin is loaded (but not enabled yet)
