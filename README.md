@@ -106,7 +106,7 @@ public class ExamplePlugin extends JavaPlugin {
 ```
 I'm sure those of you who have written code for production environments could see the usefulness of this tool. You can log all the errors in development without having to remove them when you're releasing your plugin. By doing some clever Gradle build, you could theoretically set this up to automatically detect if you're building a Development build of your plugin or a Release build, so you don't have to worry about cluttering the server console of the user.
 
-If you're feeling chaotic neutral, you can even save the instance of the PluginEnvironment after you called ```.create();``` in the Factory, so you could declare it globally and use it that way.
+If you're feeling chaotic neutral, you can even save the instance of the PluginEnvironment after you called ```.create();``` in the Factory so you could declare it globally and use it that way.
 
 Still not for you? The next one will surely excite you.
 
