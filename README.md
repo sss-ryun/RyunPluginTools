@@ -1,6 +1,8 @@
 # Ryun's Plugin Tools
 This set of tools was developed to aid in developing Bukkit/Spigot/Paper plugins.
 
+Check the [releases](https://github.com/sss-ryun/RyunPluginTools/releases) for the jar
+
 |Plugin API             |Compatibility      |
 |-----------------------|-------------------|
 |Bukkit (Main)          |:white_check_mark: |
@@ -30,23 +32,17 @@ import me.ryun.plugintools.PluginCommands;
 */
 
 public class ExamplePlugin extends JavaPlugin {
-	//Global variable so the instance is reused every onCommand() called
+	//Global variable so the instance is reused for every method calls
 	private PluginCommands commands;
 	
 	//This constructor method is called before other methods in your plugin will be called
 	public ExamplePlugin() {
 		commands = new PluginCommands();
-	}
-
-	//This method is called when your plugin is enabled
-	@Override
-	public void onEnable() {
-		//I recommend adding the commands first before registering your plugin
+		
+		//I recommend adding them here so they are added before all of the other code are run
 		commands.add(new TestCommand1());
 		commands.add(new TestCommand2());
 		commands.add(new TestCommand3());
-		
-		Bukkit.getPluginManager().registerEvents(this, this);
 	}
 
 	//This method is called when a Player uses /(insert command here)
@@ -54,22 +50,32 @@ public class ExamplePlugin extends JavaPlugin {
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 		return commands.call(sender, command, label, args);
 	}
+	
+	//This method is called when a Player adds a space after a command, and the results are shown and could be used to autocomplete the command
+	@Override
+	public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+		return commands.completeTab(sender, command, alias, args);
+	}
 }
 ```
 The experts among you might notice that the ```commands.add();``` method resembles an ArrayList/List/Collection. This is because PluginCommands is a subclass of the class ArrayList, which means you can do a lot of things to your lists of commands if you want, provided they are available in the ArrayList parent class.
 
-**What does it do?**
+**What does it do?**</br>
 The method ```commands.call(sender, command, label, args);```  loops through all of the commands added and returns a boolean value if a command was executed.
 ***\*NOTE: This method stops as soon as a command is executed in the order of the sequence they are added.***
 
-Additionally, there is another method you can call if you don't want it to stop if a command was executed.
-```java
-commands.callAll(sender, command, label, args);
-```
-***\*NOTE: This method will execute commands with the SAME NAME i.e `/test` from Command1 and `/test` from Command2 will execute consecutively.***
+The method ```commands.completeTab(sender, command, alias, args);```  loops through all of the commands added and returns a list of values if a command could be tab completed.
+***\*NOTE: This method stops as soon as a command could be tab completed in the order of the sequence they are added.***
 
-**Why did you create it?**
-Ultimately, this tool is created for the sake of convenience and clean code. I can create as many CommandExecutor subclasses and not worry about using the silly ```Bukkit.getPluginCommand("test").setExecutor(new TestCommand());```, which in my opinion, creates very ugly and unreadable code.
+Additionally, there are other methods you can call if you don't want it to stop if a command was executed or if it could be tab complete.
+```java
+commands.callAll(sender, command, label, args); //Returns a boolean value
+commands.completeTabAll(sender, command, alias, args); //Returns a List<String> or null
+```
+***\*NOTE: These methods will go through all the commands even those with the SAME NAME</br>i.e `/test` from Command1 and `/test` from Command2 will be called consecutively.***
+
+**Why did you create it?**</br>
+Ultimately, this tool is created for the sake of convenience and clean code. I can create as many TabExecutor subclasses and not worry about using the silly ```Bukkit.getPluginCommand("test").setExecutor(new TestCommand());```, which in my opinion, creates very ugly and unreadable code.
 
 If you don't find this tool helpful, it's not for you. Keep reading as you might like the other ones.
 
@@ -185,21 +191,26 @@ public class ExamplePlugin extends JavaPlugin {
 When you test your plugin on and off every few minutes to see your changes, are you really not annoyed that you have to type `stop` or just force close the test server(which could corrupt it) each time you build and test? If you are, this is the solution to your problem.
 
 ## You want to try?
-First, clone the repo directly to your project then add these lines of code to the specified files</br>
-`{your_project}/settings.gradle`
-```gradle
-include 'RyunPluginTools'
-```
+First, clone the repo directly to your project then add these lines of code to your `build.gradle` file</br>
 `{your_project}/build.gradle`
 ```gradle
+repositories {
+	flatDir {
+		dirs("libs") //This allows you to add jar dependencies in your gradle project
+	}
+}
 dependencies {
-	implementation project(':RyunPluginTools');
+	implementation('me.ryun:plugintools:0.1.1'); //This won't work if you don't flatDir
 }
 ```
+And download the jar from the [releases](https://github.com/sss-ryun/RyunPluginTools/releases) to the folder `libs/` in your project
+
+**\*NOTE: You may use [Shadow](https://imperceptiblethoughts.com/shadow/)- a Gradle plugin for building JARs with dependencies if you get a ClassNotFound error when running your plugin in your test server.**
+
 I hope you found all my plugin tools to be helpful. Feedback is appreciated. If you want to add your own, do fork the repo and request a pull once your changes are finalized.
 
 ## Still confused?
-Go download and read the [javadocs](javadocs/index.html)
+Go read the [javadocs](https://sss-ryun.github.io/RyunPluginTools/)
 
 ## License:
 ```java
