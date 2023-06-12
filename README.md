@@ -200,7 +200,7 @@ repositories {
 	}
 }
 dependencies {
-	implementation('me.ryun:plugintools:0.1.1'); //This won't work if you don't flatDir
+	implementation('me.ryun:plugintools:1.0.0'); //This won't work if you don't flatDir
 }
 ```
 And download the jar from the [releases](https://github.com/sss-ryun/RyunPluginTools/releases) to the folder `libs/` in your project
