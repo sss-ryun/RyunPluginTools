@@ -1,9 +1,16 @@
+import java.nio.file.Files
+
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
+//Load buildcode
+File buildCodeFile = project.rootDir.toPath().resolve("buildcode.properties").toFile()
+int buildcode = Files.exists(buildCodeFile.toPath()) ? Integer.valueOf(Files.readString(buildCodeFile.toPath())) + 1 : 0
+
 group 'me.ryun.plugintools'
-version '0.1.0'
+version '0.1.1-b' + String.valueOf(buildcode)
 
 repositories {
     mavenCentral()
@@ -19,6 +26,14 @@ dependencies {
     compileOnly('io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT')
 
     implementation("org.yaml:snakeyaml:2.0")
+}
+
+shadowJar {
+    archiveClassifier.set('')
+
+    doLast {
+        Files.write(buildCodeFile.toPath(), String.valueOf(buildcode).getBytes("UTF-8"))
+    }
 }
 
 test {

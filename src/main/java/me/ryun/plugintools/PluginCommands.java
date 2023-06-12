@@ -18,27 +18,30 @@ package me.ryun.plugintools;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A call list for all of the {@link CommandExecutor} in the {@link org.bukkit.plugin.java.JavaPlugin}
+ * A call list for all of the {@link TabExecutor} in the {@link org.bukkit.plugin.java.JavaPlugin}
  * @author <a href="https://github.com/sss-ryun">SSS Ryun</a>
  */
-public class PluginCommands extends ArrayList<CommandExecutor> {
+public class PluginCommands extends ArrayList<TabExecutor> {
     /**
-     * Calls each {@link CommandExecutor} by order and stops when one returns true, effectively prioritizing by order
-     * @param sender {@link CommandExecutor#onCommand(CommandSender, Command, String, String[])}
-     * @param command {@link CommandExecutor#onCommand(CommandSender, Command, String, String[])}
-     * @param label {@link CommandExecutor#onCommand(CommandSender, Command, String, String[])}
-     * @param args {@link CommandExecutor#onCommand(CommandSender, Command, String, String[])}
+     * Calls each {@link TabExecutor#onCommand(CommandSender, Command, String, String[])} by order and stops when one returns true, effectively prioritizing by order
+     * @param sender {@link CommandSender}
+     * @param command {@link Command}
+     * @param label {@link String}
+     * @param args {@link String[]}
      * @return If a command was executed
      */
     public boolean call(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         boolean result = false;
 
-        for (CommandExecutor executor: this) {
+        for (TabExecutor executor: this) {
             result = executor.onCommand(sender, command, label, args);
 
             if(result)
@@ -49,20 +52,63 @@ public class PluginCommands extends ArrayList<CommandExecutor> {
     }
 
     /**
-     * Calls each {@link CommandExecutor} by order without stopping
-     * @param sender {@link CommandExecutor#onCommand(CommandSender, Command, String, String[])}
-     * @param command {@link CommandExecutor#onCommand(CommandSender, Command, String, String[])}
-     * @param label {@link CommandExecutor#onCommand(CommandSender, Command, String, String[])}
-     * @param args {@link CommandExecutor#onCommand(CommandSender, Command, String, String[])}
+     * Calls each {@link TabExecutor#onCommand(CommandSender, Command, String, String[])} by order without stopping
+     * @param sender {@link CommandSender}
+     * @param command {@link Command}
+     * @param label {@link String}
+     * @param args {@link String[]}
      * @return If a command was executed
      */
     public boolean callAll(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         boolean result = false;
 
-        for (CommandExecutor executor: this) {
+        for (TabExecutor executor: this) {
             result |= executor.onCommand(sender, command, label, args);
         }
 
         return result;
+    }
+
+    /**
+     * Calls each {@link TabExecutor#onTabComplete(CommandSender, Command, String, String[])} by order and stops when one returns values, effectively prioritizing by order
+     * @param sender {@link CommandSender}
+     * @param command {@link Command}
+     * @param alias {@link String}
+     * @param args {@link String[]}
+     * @return
+     */
+    public @Nullable List<String> completeTab(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        List<String> results = new ArrayList<>();
+
+        for (TabExecutor executor: this) {
+            List<String> result = executor.onTabComplete(sender, command, alias, args);
+            if(result != null)
+                results.addAll(result);
+
+            if(results.size() > 0)
+                break;
+        }
+
+        return results;
+    }
+
+    /**
+     * Calls each {@link TabExecutor#onTabComplete(CommandSender, Command, String, String[])} by order without stopping
+     * @param sender {@link CommandSender}
+     * @param command {@link Command}
+     * @param alias {@link String}
+     * @param args {@link String[]}
+     * @return
+     */
+    public @Nullable List<String> completeTabAll(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        List<String> results = new ArrayList<>();
+
+        for (TabExecutor executor: this) {
+            List<String> result = executor.onTabComplete(sender, command, alias, args);
+            if(result != null)
+                results.addAll(result);
+        }
+
+        return results;
     }
 }
