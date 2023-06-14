@@ -28,15 +28,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ServerShutdownOnQuit implements Listener {
 
-    private final boolean checkIfDev;
-
-    /**
-     * @param checkIfDev Check if the environment is development or production/release
-     */
-    public ServerShutdownOnQuit(boolean checkIfDev) {
-        this.checkIfDev = checkIfDev;
-    }
-
     /**
      * Shutdown the server when there are no online players after the last player quits.
      * @param event {@link PlayerQuitEvent} from the {@link EventHandler}
@@ -44,7 +35,7 @@ public class ServerShutdownOnQuit implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event){
         //The online player count is updated only after this event, so we check for <1 instead
-        if((!checkIfDev || PluginEnvironment.get().isDevelopment()) && Bukkit.getServer().getOnlinePlayers().size() <= 1)
+        if(Bukkit.getServer().getOnlinePlayers().size() <= 1)
             Bukkit.getServer().shutdown();
     }
 }

@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"me.ryun.plugintools"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"me.ryun.plugintools"},{"l":"me.ryun.plugintools.exceptions"}];updateSearchResults();
