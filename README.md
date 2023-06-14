@@ -182,13 +182,31 @@ public class ExamplePlugin extends JavaPlugin {
 		//Checks if you set your environment to development or production/release
 		if(PluginEnvironment.get().isDevelopment()) {
 			//This will shutdown your server if the last player quits/leaves
-			Bukkit.getPluginManager().registerEvents(new ServerShutdownOnQuit(true), this);
+			Bukkit.getPluginManager().registerEvents(new ServerShutdownOnQuit(), this);
 			Bukkit.getLogger().info("My example plugin is enabled.");
 		}
 	}
 }
 ```
 When you test your plugin on and off every few minutes to see your changes, are you really not annoyed that you have to type `stop` or just force close the test server(which could corrupt it) each time you build and test? If you are, this is the solution to your problem.
+
+**CraftBukkitFinder**
+```java
+import me.ryun.plugintools.CraftBukkitFinder;
+
+public class ExamplePlugin extends JavaPlugin {
+	//This method is called when your plugin is enabled
+	@Override
+	public void onEnable() {
+		Bukkit.getLogger().info("This Bukkit server uses CraftBukkit: " + CraftBukkitFinder.scan(false));
+	}
+}
+```
+This code will output the version of your CraftBukkit by scanning through versions 1.9 to 1.100(I know. That's some forward compatibility). ```CraftBukkitFinder.scan(false)``` The `false` here tells the finder that you don't want to see its logs when it tries to scan for the packages. You can set it to `true` if you want to see it log.
+
+Example output: `org.bukkit.craftbukkit.v1_20_R1`
+
+Dynamically finding the CraftBukkit version is useful if you're gonna use Reflection in your Bukkit plugin.
 
 ## You want to try?
 First, clone the repo directly to your project then add these lines of code to your `build.gradle` file</br>
@@ -200,7 +218,7 @@ repositories {
 	}
 }
 dependencies {
-	implementation('me.ryun:plugintools:1.0.0'); //This won't work if you don't flatDir
+	implementation('me.ryun:plugintools:1.1.0'); //This won't work if you don't flatDir
 }
 ```
 And download the jar from the [releases](https://github.com/sss-ryun/RyunPluginTools/releases) to the folder `libs/` in your project
