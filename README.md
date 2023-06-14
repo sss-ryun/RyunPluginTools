@@ -19,6 +19,7 @@ There are lots of tools ready for use:
 * [PluginEnvironment](src/main/java/me/ryun/plugintools/PluginEnvironment.java)
 * [PluginInfo](src/main/java/me/ryun/plugintools/PluginInfo.java)
 * [ServerShutdownOnQuit](src/main/java/me/ryun/plugintools/ServerShutdownOnQuit.java)
+* [CraftBukkitFinder](src/main/java/me/ryun/plugintools/CraftBukkitFinder.java)
 
 **See examples down below**
 
